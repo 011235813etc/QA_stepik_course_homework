@@ -1,1 +1,8 @@
 .idea/*
+geckodriver.log
+__pycache__/*
+.pytest_cache/*
+chapter_3/__pycache__/*
+chapter_3/examples/__pycache__/*
+chapter_3/examples/lesson6/step7/__pycache__/*
+
