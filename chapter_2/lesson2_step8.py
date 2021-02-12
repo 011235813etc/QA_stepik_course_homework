@@ -39,7 +39,7 @@ if __name__ == "__main__":
 
         # Получаем путь до файла
         current_path = os.path.abspath(os.path.dirname(__file__))
-        file_path = os.path.join(current_path, "chapter2_lesson2_step8.txt")
+        file_path = os.path.join(current_path, "lesson2_step8.txt")
 
         # Загружаем файл в форму
         load_file = browser.find_element_by_id("file")
