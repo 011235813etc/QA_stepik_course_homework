@@ -1,6 +1,6 @@
 """
-https://stepik.org/lesson/238819/step/7?unit=211271
-example from lesson 2 step 7
+https://stepik.org/lesson/238819/step/8?unit=211271
+example from lesson 2 step 8
 """
 
 from selenium.webdriver.common.by import By
@@ -8,3 +8,9 @@ from selenium.webdriver.common.by import By
 
 class MainPageLocators():
     LOGIN_LINK = (By.CSS_SELECTOR, "#login_link")
+
+
+class LoginPageLocators():
+    LOGIN_URL = (By.ID, "login_link")
+    LOGIN_FORM = (By.ID, "login_form")
+    REGISTER_FORM = (By.ID, "register_form")
