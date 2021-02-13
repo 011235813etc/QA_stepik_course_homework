@@ -32,6 +32,7 @@ should_be_register_form
 """
 from .base_page import BasePage
 from .locators import LoginPageLocators
+from .locators import MainPageLocators
 
 
 class LoginPage(BasePage):
@@ -44,7 +45,7 @@ class LoginPage(BasePage):
         # реализуйте проверку на корректный url адрес
 
         # ищем кнопку для перехода на страницу регистрации
-        login_page = self.browser.find_element(*LoginPageLocators.LOGIN_URL)
+        login_page = self.browser.find_element(*MainPageLocators.LOGIN_LINK)
         # переходим на страницу регистрации
         login_page.click()
         # получаем url текущей страницы
