@@ -1,40 +1,68 @@
 """
-Задание: независимость от данных
+Задание: независимость контента, ищем баг
 
-Хорошие автотесты должны быть максимально независимы от данных. Худшее, что можно
-сделать в тесте это "захардкодить" проверки для объектов, которые существуют только
-на вашем конкретном инстансе. Почему? Потому что данные будут постоянно меняться,
-и при каждом таком изменении придется чинить автотесты. Еще это ухудшает переиспользование
-метода: допустим, мы хотим прогнать тест для множества товаров, тогда придется писать большое
-количество проверок: по одной для каждого товара. В конечном итоге, это сказывается на
-качестве продукта, так как такие тесты работают на узкой выборке страниц.
+Эта задача для настоящих ниндзя автотестинга. Не потому что она сложная, а потому что сейчас
+мы будем ловить с вами настоящий баг с помощью наших автотестов. Для нашего интернет-магазина
+было запущено несколько новых промо-акций, одна из которых привела к появлению бага.
+Промо-акция включается путем добавления параметра ?promo=offerN к ссылке на товар.
 
-Общая рекомендация: ваши тесты не должны зависеть от того, что вы не можете контролировать.
-Это может быть информация, уже хранящаяся в базе данных, или сторонние сервисы, которые
-использует ваше приложение. Вы можете проверять конкретные данные только в случае, когда
-используете специально подготовленную тестовую базу, инициируемую перед каждым запуском
-тестов, или добавляете нужные данные в базу данных напрямую или через API приложения.
+К счастью, нам не придется менять наш тест, чтобы проверить изменения в коде. Мы просто
+запустим всё тот же тест на странице http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/
+с параметризацией. Вам нужно определить, при каком значении параметра promo автотест упадет.
+Для этого проверьте результат работы PyTest и найдите url, на котором произошла ошибка.
+Значение параметра может изменяться от offer0 до offer9.
 
-Попробуйте запустить автотест, который мы написали на предыдущем шаге, на странице
-http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear2019.
+Пример ссылки: http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0.
+Если баг будет найден на этой странице, то введите в качестве ответа
+http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0.
 
-Если в предыдущем тесте после добавления товара в корзину вы проверяли в сообщении
-сайта фиксированную строку "The shellcoder's handbook", то тест упадет, так как
-теперь мы добавили другой товар. Если тест прошел, то вы молодец и можете просто
-вставить новый проверочный код в этом задании.
+Запустить сразу несколько тестов вы можете, используя @pytest.mark.parametrize.
+Мы уже сделали для вас шаблон теста:
 
-Чтобы тест был независимым от контента:
+@pytest.mark.parametrize('link',
+    ["http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
+    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer1",
+    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer2",
+    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer3",
+    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer4",
+    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer5",
+    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer6",
+    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer7",
+    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer8",
+    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer9"])
+def test_guest_can_add_product_to_basket(browser, link):
+    # ваша реализация теста
 
-   - Измените методы проверки таким образом, чтобы они принимали как аргумент название товара и цену товара.
-   - Сделайте метод, который вытаскивает из элемента текст-название товара и возвращает его.
-   - Сделайте такой же метод для цены.
-   - Теперь проверяйте, что название товара в сообщении совпадает с заголовком товара.
+Подсказка: баг должен быть найден методом проверки.
+
+После того как вы обнаружили баг, учитывая что чинить его не собираются,
+лучше всего пометить падающий тест как xfail или skip. Помните, как мы такое
+проворачивали в третьем модуле? Освежить память: XFail: помечать тест как ожидаемо падающий.
+
+С параметризацией делается это примерно так:
+
+@pytest.mark.parametrize('link', ["okay_link",
+                                  pytest.param("bugged_link", marks=pytest.mark.xfail),
+                                  "okay_link"])
 """
+import pytest
 from .pages.product_page import ProductPage
 
-
-def test_guest_can_add_product_to_basket(browser):
-    link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear2019"
+@pytest.mark.parametrize('link', [
+    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
+    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer1",
+    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer2",
+    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer3",
+    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer4",
+    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer5",
+    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer6",
+    pytest.param(
+        "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer7",
+        marks=pytest.mark.xfail
+    ),
+    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer8",
+    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer9"])
+def test_guest_can_add_product_to_basket(browser, link):
     # инициализируем Page Object, передаем в конструктор экземпляр драйвера и url адрес
     page = ProductPage(browser, link)
     page.open()
