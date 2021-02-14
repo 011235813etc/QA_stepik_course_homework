@@ -1,9 +1,11 @@
 """
-https://stepik.org/lesson/201964/step/2?unit=176022
-example from lesson 3 step 2
+https://stepik.org/lesson/201964/step/5?unit=176022
+example from lesson 3 step 5
 """
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import NoAlertPresentException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import math
 
 
@@ -16,10 +18,18 @@ class BasePage():
     def open(self):
         self.browser.get(self.url)
 
-    def is_element_present(self, how, what):
+    def is_not_element_present(self, how, what, timeout=4):
         try:
-            self.browser.find_element(how, what)
-        except NoSuchElementException:
+            WebDriverWait(self.browser, timeout).until(EC.presence_of_element_located((how, what)))
+        except TimeoutException:
+            return True
+        return False
+
+    def is_disappeared(self, how, what, timeout=4):
+        try:
+            WebDriverWait(self.browser, timeout, 1, TimeoutException). \
+                until_not(EC.presence_of_element_located((how, what)))
+        except TimeoutException:
             return False
         return True
 
