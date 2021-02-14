@@ -1,69 +1,85 @@
 """
-Задание: независимость контента, ищем баг
+Задание: отрицательные проверки
 
-Эта задача для настоящих ниндзя автотестинга. Не потому что она сложная, а потому что сейчас
-мы будем ловить с вами настоящий баг с помощью наших автотестов. Для нашего интернет-магазина
-было запущено несколько новых промо-акций, одна из которых привела к появлению бага.
-Промо-акция включается путем добавления параметра ?promo=offerN к ссылке на товар.
+Добавьте к себе в проект функции из предыдущего шага и реализуйте несколько простых тестов:
 
-К счастью, нам не придется менять наш тест, чтобы проверить изменения в коде. Мы просто
-запустим всё тот же тест на странице http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/
-с параметризацией. Вам нужно определить, при каком значении параметра promo автотест упадет.
-Для этого проверьте результат работы PyTest и найдите url, на котором произошла ошибка.
-Значение параметра может изменяться от offer0 до offer9.
+test_guest_cant_see_success_message_after_adding_product_to_basket:
 
-Пример ссылки: http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0.
-Если баг будет найден на этой странице, то введите в качестве ответа
-http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0.
+   1. Открываем страницу товара
+   2. Добавляем товар в корзину
+   3. Проверяем, что нет сообщения об успехе с помощью is_not_element_present
 
-Запустить сразу несколько тестов вы можете, используя @pytest.mark.parametrize.
-Мы уже сделали для вас шаблон теста:
+test_guest_cant_see_success_message:
 
-@pytest.mark.parametrize('link',
-    ["http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
-    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer1",
-    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer2",
-    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer3",
-    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer4",
-    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer5",
-    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer6",
-    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer7",
-    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer8",
-    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer9"])
-def test_guest_can_add_product_to_basket(browser, link):
-    # ваша реализация теста
+   1. Открываем страницу товара
+   2. Проверяем, что нет сообщения об успехе с помощью is_not_element_present
 
-Подсказка: баг должен быть найден методом проверки.
+test_message_disappeared_after_adding_product_to_basket:
 
-После того как вы обнаружили баг, учитывая что чинить его не собираются,
-лучше всего пометить падающий тест как xfail или skip. Помните, как мы такое
-проворачивали в третьем модуле? Освежить память: XFail: помечать тест как ожидаемо падающий.
+   1. Открываем страницу товара
+   2. Добавляем товар в корзину
+   3. Проверяем, что нет сообщения об успехе с помощью is_disappeared
 
-С параметризацией делается это примерно так:
+Запустите все три теста, и отметьте ниже верные утверждения для каждого теста.
 
-@pytest.mark.parametrize('link', ["okay_link",
-                                  pytest.param("bugged_link", marks=pytest.mark.xfail),
-                                  "okay_link"])
+Важно! После того как пройдете это задание, те тесты, которые упали пометьте как
+XFail или skip, как это сделать мы разбирали в модуле 3: XFail: помечать тест как ожидаемо падающий.
 """
 import pytest
 from .pages.product_page import ProductPage
 
-@pytest.mark.parametrize('link', [
-    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
-    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer1",
-    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer2",
-    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer3",
-    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer4",
-    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer5",
-    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer6",
-    pytest.param(
-        "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer7",
-        marks=pytest.mark.xfail
-    ),
-    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer8",
-    "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer9"])
+@pytest.mark.parametrize('link',
+    [
+        "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
+        "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer1",
+        "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer2",
+        "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer3",
+        "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer4",
+        "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer5",
+        "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer6",
+        pytest.param(
+            "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer7",
+            marks=pytest.mark.xfail
+        ),
+        "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer8",
+        "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer9"
+    ])
 def test_guest_can_add_product_to_basket(browser, link):
     # инициализируем Page Object, передаем в конструктор экземпляр драйвера и url адрес
     page = ProductPage(browser, link)
     page.open()
     page.should_be_added_to_basket()
+    page.should_be_same_product_name()
+    page.should_be_same_product_price()
+
+
+@pytest.mark.parametrize('link', [
+        pytest.param(
+            "http://selenium1py.pythonanywhere.com/catalogue/the-shellcoders-handbook_209/?promo=newYear",
+        marks=pytest.mark.xfail
+    )])
+def test_guest_cant_see_success_message_after_adding_product_to_basket(browser, link):
+    page = ProductPage(browser, link)
+    page.open()
+    page.should_be_added_to_basket()
+    page.should_not_be_success_message()
+
+
+@pytest.mark.parametrize('link',
+        ["http://selenium1py.pythonanywhere.com/catalogue/the-shellcoders-handbook_209/?promo=newYear"])
+def test_guest_cant_see_success_message(browser, link):
+    page = ProductPage(browser, link)
+    page.open()
+    page.should_not_be_success_message()
+
+
+@pytest.mark.parametrize('link', [
+        pytest.param(
+            "http://selenium1py.pythonanywhere.com/catalogue/the-shellcoders-handbook_209/?promo=newYear",
+        marks=pytest.mark.xfail
+    )])
+def test_message_disappeared_after_adding_product_to_basket(browser, link):
+    page = ProductPage(browser, link)
+    page.open()
+    page.should_be_added_to_basket()
+    page.should_be_success_message_disappeared()
