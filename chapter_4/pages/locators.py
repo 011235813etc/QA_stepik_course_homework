@@ -1,6 +1,6 @@
 """
-https://stepik.org/lesson/238819/step/8?unit=211271
-example from lesson 2 step 8
+https://stepik.org/lesson/201964/step/13?unit=176022
+example from lesson 3 step 13
 """
 
 from selenium.webdriver.common.by import By
@@ -13,6 +13,10 @@ class MainPageLocators():
 class LoginPageLocators():
     LOGIN_FORM = (By.ID, "login_form")
     REGISTER_FORM = (By.ID, "register_form")
+    REGISTRATION_FORM_EMAIL = (By.ID, "id_registration-email")
+    REGISTRATION_FORM_PASSWORD = (By.ID, "id_registration-password1")
+    REGISTRATION_FORM_PASSWORD_CONFIRM = (By.ID, "id_registration-password2")
+    REGISTRATION_BUTTON = (By.CSS_SELECTOR, "[name='registration_submit']")
 
 
 class ProductPageLocators():
@@ -30,4 +34,4 @@ class BasePageLocators():
     LOGIN_LINK = (By.CSS_SELECTOR, "#login_link")
     MAIN_LINK = (By.CSS_SELECTOR, ".col-sm-7.h1")
     TITLE_BASKET_IS_EMPTY = (By.CSS_SELECTOR, "#content_inner > p")
-    # LOGIN_LINK_INVALID = (By.CSS_SELECTOR, "#login_link_inc")
+    USER_ICON = (By.CSS_SELECTOR, ".icon-user")
